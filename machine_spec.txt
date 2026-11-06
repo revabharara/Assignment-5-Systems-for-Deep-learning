@@ -1,0 +1,29 @@
+# Machine specification (Q1). Fill in every field; give units. Fill in N/A if not applicable.
+
+CPU model                       : Intel Core Ultra 7 165H
+Microarchitecture               : Meteor Lake; P-cores Redwood Cove, E-cores and LP E-cores Crestmont
+Physical cores                  : 16 (6 P + 8 E + 2 LP E)
+Logical cores (hardware threads): 22 (P-cores have 2 threads each, E-cores 1)
+Performance / efficiency cores  : 6 performance / 10 efficiency (8 E on the compute tile + 2 LP E on the SoC tile)
+Base clock (GHz)                : P 1.4, E 0.9, LP E 0.7
+Max single-core clock (GHz)     : P 5.0, E 3.8, LP E 2.5
+All-core clock under load (GHz) : ~1.9 on the P-cores (measured with an FMA loop; see report)
+SIMD instruction set and width  : AVX2 + FMA3 (+ AVX-VNNI), 256-bit = 8 FP32 lanes; no AVX-512
+FMA units per core              : P-core 2 x 256-bit; E-core 2 x 128-bit
+Vector registers per core       : 16 x 256-bit YMM per hardware thread
+L1 data cache (per core)        : P-core 48 KB, E-core 32 KB (L1I 64 KB on both)
+L2 cache (size, shared by)      : P-core 2 MB private each (12 MB); E-core 2 MB per 4-core cluster (2 clusters); LP E 2 MB shared by the 2 LP E-cores
+L3 cache (size, shared by)      : 24 MB, shared by the 6 P-cores and 8 E-cores (not the LP E-cores)
+Cache line size (bytes)         : 64
+RAM size (GB)                   : 64
+RAM type, speed (MT/s), channels: LPDDR5x, 7467 MT/s, 8 x 16-bit channels (128-bit bus)
+Operating system                : Windows 11 Enterprise 10.0.26200, built and run in MSYS2 CLANG64
+Compiler and version            : clang 23.1.5 (MSYS2), -O3 -march=native
+
+# Derived (show the calculation in report.pdf)
+Peak FP32 GFLOP/s, one core     : 160 theoretical (P-core at 5.0 GHz); 70.9 measured
+Peak FP32 GFLOP/s, all cores    : 1526 theoretical (all cores at max turbo); 500 measured
+Memory bandwidth (GB/s)         : 119.5 theoretical; 80.7 measured (triad, all threads), 28.8 measured on one core
+Ridge point, one core (FLOP/B)  : 1.34 theoretical (160 / 119.5); 2.5 measured (70.9 / 28.8)
+Ridge point, all cores (FLOP/B) : 12.8 theoretical (1526 / 119.5); 6.2 measured (500 / 80.7)
+
